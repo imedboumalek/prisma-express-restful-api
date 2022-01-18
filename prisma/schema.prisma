@@ -8,57 +8,53 @@ datasource db {
 }
 
 model author {
-  id                      Int           @id
-  username                String?       @unique @db.VarChar(50)
-  first_name              String?       @db.VarChar(50)
-  last_name               String?       @db.VarChar(50)
-  email                   String?       @unique @db.VarChar(320)
-  country                 Int?
-  org                     Int?
-  country_authorTocountry country?      @relation(fields: [country], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_author.country")
-  organization            organization? @relation(fields: [org], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_author.org")
+  id           Int           @id @default(autoincrement())
+  email        String        @unique @db.VarChar(320)
+  password     String        @db.VarChar(60)
+  username     String        @unique @db.VarChar(50)
+  first_name   String        @default("") @db.VarChar(50)
+  last_name    String        @default("") @db.VarChar(50)
+  country      Int?
+  org          Int?
+  organization organization? @relation(fields: [org], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_author.org")
 }
 
 model conference {
-  id                          Int       @id
-  name                        String?   @db.VarChar(128)
-  date                        DateTime? @db.Timestamp(6)
-  sub_limit_date              DateTime? @db.Timestamp(6)
-  country                     Int?
-  topics                      Int[]
-  country_conferenceTocountry country?  @relation(fields: [country], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_conference.country")
+  id             Int       @id @default(autoincrement())
+  name           String    @db.VarChar(128)
+  date           DateTime? @db.Timestamp(6)
+  sub_limit_date DateTime? @db.Timestamp(6)
+
 }
 
 model country {
-  id         Int          @id
-  name       String?      @db.VarChar(128)
-  author     author[]
-  conference conference[]
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(128)
 }
 
 model organization {
-  id     Int      @id
-  name   String?  @db.VarChar(128)
+  id     Int      @id @default(autoincrement())
+  name   String   @db.VarChar(128)
   author author[]
 }
 
 model submission {
-  id              Int       @id
-  submission_date DateTime? @db.Timestamp(6)
+  id              Int      @id @default(autoincrement())
+  submission_date DateTime @default(now()) @db.Timestamp(6)
   authors         Int[]
-  title           String?   @db.VarChar(256)
+  title           String?  @db.VarChar(256)
   resume          String?
-  url             String?   @db.VarChar(512)
+  url             String?  @db.VarChar(512)
   tags            Int[]
   conferences     Int[]
 }
 
 model tag {
-  id    Int     @id
-  title String? @db.VarChar(50)
+  id    Int    @id @default(autoincrement())
+  title String @default("") @db.VarChar(50)
 }
 
 model topic {
-  id   Int     @id
-  name String? @db.VarChar(128)
+  id   Int    @id @default(autoincrement())
+  name String @default("") @db.VarChar(128)
 }
