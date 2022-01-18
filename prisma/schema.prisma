@@ -26,6 +26,8 @@ model conference {
   name           String       @db.VarChar(128)
   date           DateTime?    @db.Timestamp(6)
   sub_limit_date DateTime?    @db.Timestamp(6)
+  topicId Int
+  topic topic @relation(fields: [topicId], references: [id])
   countryId      Int
   country        country      @relation(fields: [countryId], references: [id])
   organizerId    Int
@@ -61,6 +63,8 @@ model submission {
   url             String?             @db.VarChar(512)
   tags            submissionTags[]
   conferences     Int[]
+  topicId        Int
+  topic          topic              @relation(fields: [topicId], references: [id])
 
 }
 
@@ -91,4 +95,6 @@ model submissionTags {
 model topic {
   id   Int    @id @default(autoincrement())
   name String @default("") @db.VarChar(128)
+  conferences conference[]
+  submissions submission[]
 }
