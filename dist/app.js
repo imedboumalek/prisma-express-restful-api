@@ -17,8 +17,8 @@ app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cookie_parser_1.default)());
 app.use(authors_1.default);
 app.listen((_a = process.env.PORT) !== null && _a !== void 0 ? _a : 8080, () => {
+    // console.log("hello world");
     var _a;
-    console.log("hello world");
     console.log(`Server is running on port ${(_a = process.env.PORT) !== null && _a !== void 0 ? _a : 8080}`);
 });
 module.exports = app;

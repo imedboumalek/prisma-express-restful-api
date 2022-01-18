@@ -2,11 +2,10 @@
   "name": "soa-mini-project",
   "version": "0.0.0",
   "private": true,
-  "main": "dist/app.js",
   "scripts": {
-    "build": "tsc --watch",
+    "build": "tsc",
     "prestart": "npm run build",
-    "start": "nodemon .",
+    "start": "nodemon src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
