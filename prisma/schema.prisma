@@ -7,53 +7,60 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model author {
+model Author {
   id          Int                 @id @default(autoincrement())
   email       String              @unique @db.VarChar(320)
   password    String              @db.VarChar(60)
+  salt        String              @db.VarChar(60)
+  jwt         String              @db.VarChar(320)
   username    String              @unique @db.VarChar(50)
   first_name  String              @default("") @db.VarChar(50)
   last_name   String              @default("") @db.VarChar(50)
-  submissions SubmissionAuthors[]
   countryId   Int
   orgId       Int
-  country     country             @relation(fields: [countryId], references: [id])
-  org         organization        @relation(fields: [orgId], references: [id])
+  submissions SubmissionAuthors[]
+  country     Country             @relation(fields: [countryId], references: [id])
+  org         Organization        @relation(fields: [orgId], references: [id])
+  updatedAt   DateTime            @updatedAt
+  createdAt   DateTime            @db.Timestamp
 }
 
-model conference {
+model Conference {
   id             Int          @id @default(autoincrement())
   name           String       @db.VarChar(128)
   date           DateTime?    @db.Timestamp(6)
   sub_limit_date DateTime?    @db.Timestamp(6)
+  createdAt      DateTime     @db.Timestamp
+  updatedAt      DateTime     @updatedAt
+  submissions    ConferenceSubmissions[]
   topicId Int
-  topic topic @relation(fields: [topicId], references: [id])
+  topic Topic @relation(fields: [topicId], references: [id])
   countryId      Int
-  country        country      @relation(fields: [countryId], references: [id])
+  country        Country      @relation(fields: [countryId], references: [id])
   organizerId    Int
-  organizer      organization @relation(fields: [organizerId], references: [id])
+  organizer      Organization @relation(fields: [organizerId], references: [id])
 
 }
 
-model country {
+model Country {
   id          Int            @id @default(autoincrement())
   name        String         @db.VarChar(128)
-  authors     author[]
-  orgs        organization[]
-  conferences conference[]
+  authors     Author[]
+  orgs        Organization[]
+  conferences Conference[]
 }
 
-model organization {
+model Organization {
   id          Int          @id @default(autoincrement())
   name        String       @db.VarChar(128)
-  author      author[]
+  author      Author[]
   countryId   Int
-  country     country      @relation(fields: [countryId], references: [id])
-  conferences conference[]
+  country     Country      @relation(fields: [countryId], references: [id])
+  conferences Conference[]
 
 }
 
-model submission {
+model Submission {
   id              Int                 @id @default(autoincrement())
   submission_date DateTime            @default(now()) @db.Timestamp(6)
   updatedAt       DateTime            @updatedAt
@@ -61,40 +68,47 @@ model submission {
   title           String?             @db.VarChar(256)
   resume          String?
   url             String?             @db.VarChar(512)
-  tags            submissionTags[]
-  conferences     Int[]
+  tags            SubmissionTags[]
+  conferences     ConferenceSubmissions[]
   topicId        Int
-  topic          topic              @relation(fields: [topicId], references: [id])
+  topic          Topic              @relation(fields: [topicId], references: [id])
 
 }
 
 model SubmissionAuthors {
-  author       author     @relation(fields: [authorId], references: [id])
+  author       Author     @relation(fields: [authorId], references: [id])
   authorId     Int
-  submission   submission @relation(fields: [submissionId], references: [id])
+  submission   Submission @relation(fields: [submissionId], references: [id])
   submissionId Int
 
   @@id([authorId, submissionId])
 }
+model ConferenceSubmissions {
+  submission   Submission @relation(fields: [submissionId], references: [id])
+  submissionId Int
+  conference   Conference  @relation(fields: [conferenceId], references: [id])
+  conferenceId Int
 
-model tag {
+  @@id([submissionId, conferenceId])
+}
+model Tag {
   id          Int              @id @default(autoincrement())
   title       String           @default("") @db.VarChar(50)
-  submissions submissionTags[]
+  submissions SubmissionTags[]
 }
 
-model submissionTags {
+model SubmissionTags {
   tagId  Int
-  tag    tag        @relation(fields: [tagId], references: [id])
+  tag    Tag        @relation(fields: [tagId], references: [id])
   postId Int
-  post   submission @relation(fields: [postId], references: [id])
+  post   Submission @relation(fields: [postId], references: [id])
 
   @@id([tagId, postId])
 }
 
-model topic {
+model Topic {
   id   Int    @id @default(autoincrement())
   name String @default("") @db.VarChar(128)
-  conferences conference[]
-  submissions submission[]
+  conferences Conference[]
+  submissions Submission[]
 }
