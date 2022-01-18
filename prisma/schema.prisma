@@ -45,8 +45,8 @@ model organization {
   id          Int          @id @default(autoincrement())
   name        String       @db.VarChar(128)
   author      author[]
-  countrId    Int
-  country     country      @relation(fields: [countrId], references: [id])
+  countryId    Int
+  country     country      @relation(fields: [countryId], references: [id])
   conferences conference[]
 
 }
@@ -59,8 +59,9 @@ model submission {
   title           String?  @db.VarChar(256)
   resume          String?
   url             String?  @db.VarChar(512)
-  tags            Int[]
+  tags            submissionTags[]
   conferences     Int[]
+  
 }
 model SubmissionAuthors {
   author     author       @relation(fields: [authorId], references: [id])
@@ -72,6 +73,14 @@ model SubmissionAuthors {
 model tag {
   id    Int    @id @default(autoincrement())
   title String @default("") @db.VarChar(50)
+  submissions submissionTags[]
+}
+model submissionTags {
+  tagId   Int
+  tag     tag       @relation(fields: [tagId], references: [id])
+  postId  Int
+  post    submission @relation(fields: [postId], references: [id])
+  @@id([tagId, postId])
 }
 model topic {
   id   Int    @id @default(autoincrement())
