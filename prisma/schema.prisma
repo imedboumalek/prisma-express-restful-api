@@ -10,13 +10,14 @@ datasource db {
 model author {
   id           Int           @id @default(autoincrement())
   email        String        @unique @db.VarChar(320)
-  password     String        @db.VarChar(60)
+  password     String        @db.VarChar(60) 
   username     String        @unique @db.VarChar(50)
   first_name   String        @default("") @db.VarChar(50)
   last_name    String        @default("") @db.VarChar(50)
-  country      Int?
-  org          Int?
-  organization organization? @relation(fields: [org], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_author.org")
+  countryId      Int  
+  orgId        Int
+  country  country @relation(fields: [countryId], references: [id])        
+  org          organization @relation(fields: [orgId], references: [id])
 }
 
 model conference {
@@ -24,18 +25,29 @@ model conference {
   name           String    @db.VarChar(128)
   date           DateTime? @db.Timestamp(6)
   sub_limit_date DateTime? @db.Timestamp(6)
+  countryId      Int
+  country  country @relation(fields: [countryId], references: [id])
+  organizerId   Int
+  organizer  organization @relation(fields: [organizerId], references: [id])
 
 }
 
 model country {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(128)
+  authors author[]
+  orgs organization[]
+  conferences conference[]
 }
 
 model organization {
   id     Int      @id @default(autoincrement())
   name   String   @db.VarChar(128)
   author author[]
+  countrId Int
+  country country @relation(fields: [countrId], references: [id])
+  conferences conference[]
+
 }
 
 model submission {
