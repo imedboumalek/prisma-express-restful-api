@@ -82,7 +82,7 @@ const checkCredentialExistance = (req, res, next) => __awaiter(void 0, void 0, v
     next();
 });
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { username, email, password, first_name, last_name } = req.body;
+    const { username, email, password, first_name, last_name, countryId, orgId } = req.body;
     const salt = yield bcrypt_1.default.genSalt(10);
     const hashedPassword = yield bcrypt_1.default.hash(password, salt);
     const newAuthor = yield prisma_client_1.default.author
@@ -94,6 +94,8 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             first_name: first_name,
             last_name: last_name,
             salt: salt,
+            countryId: countryId,
+            orgId: orgId,
         },
     })
         .then((author) => {

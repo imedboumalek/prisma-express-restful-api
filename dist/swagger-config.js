@@ -3,7 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const options = {
     definition: {
         openapi: "3.0.0",
@@ -18,11 +20,13 @@ const options = {
         },
         servers: [
             {
-                url: "http://localhost:3000/",
+                url: "http://localhost:8080/",
             },
         ],
     },
     apis: ["./routes/*"],
 };
-exports.default = (0, swagger_jsdoc_1.default)(options);
+const router = express_1.default.Router();
+router.use("/docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup((0, swagger_jsdoc_1.default)(options)));
+exports.default = router;
 //# sourceMappingURL=swagger-config.js.map

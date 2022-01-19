@@ -19,7 +19,6 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const authors_1 = __importDefault(require("./routes/authors/authors"));
 const auth_1 = __importDefault(require("./routes/auth/auth"));
 const countries_1 = __importDefault(require("./routes/countries/countries"));
-const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_config_1 = __importDefault(require("./swagger-config"));
 const prisma_client_1 = __importDefault(require("./prisma-client"));
 function main() {
@@ -34,10 +33,10 @@ function main() {
         app.use(express_1.default.json());
         app.use(express_1.default.urlencoded({ extended: false }));
         app.use((0, cookie_parser_1.default)());
-        app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_config_1.default));
-        app.use(authors_1.default);
+        app.use(swagger_config_1.default);
         app.use(countries_1.default);
         app.use(auth_1.default);
+        app.use(authors_1.default);
         app.listen((_a = process.env.PORT) !== null && _a !== void 0 ? _a : 8080, () => {
             var _a;
             // console.log("hello");
