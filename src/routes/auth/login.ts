@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-router.post("/auth/login", (req, res) => {
+router.post("/login", (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
     res.status(400).json({
@@ -15,7 +15,7 @@ router.post("/auth/login", (req, res) => {
   });
 });
 
-router.all("/auth/login", (req, res) => {
+router.all("/login", (req, res) => {
   // return method not allowed
   res.status(405).send({
     message: "Method not allowed",
