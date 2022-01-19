@@ -1,4 +1,7 @@
+import express from "express";
 import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -14,11 +17,12 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:3000/",
+        url: "http://localhost:8080/",
       },
     ],
   },
   apis: ["./routes/*"],
 };
-
-export default swaggerJsdoc(options);
+const router = express.Router();
+router.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerJsdoc(options)));
+export default router;

@@ -6,8 +6,7 @@ import authorsRouter from "./routes/authors/authors";
 import authRouter from "./routes/auth/auth";
 import countryRouter from "./routes/countries/countries";
 
-import swaggerUi from "swagger-ui-express";
-import swaggerSpecs from "./swagger-config";
+import docs from "./swagger-config";
 import dbclient from "./prisma-client";
 
 async function main() {
@@ -22,7 +21,7 @@ async function main() {
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
 
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+  app.use(docs);
   app.use(countryRouter);
   app.use(authRouter);
   app.use(authorsRouter);
