@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
-router.post("/auth/login", (req, res) => {
+router.post("/login", (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
         res.status(400).json({
@@ -18,7 +18,7 @@ router.post("/auth/login", (req, res) => {
         password,
     });
 });
-router.all("/auth/login", (req, res) => {
+router.all("/login", (req, res) => {
     // return method not allowed
     res.status(405).send({
         message: "Method not allowed",
