@@ -13,41 +13,28 @@ const seedSubmissions = async () => {
     count++;
   }
   submissions.forEach(async (element) => {
-    dbclient.submission
-      .create({
-        data: {
-          ...element,
-          tags: {
-            connect: [
-              {
-                tagId: Math.floor(Math.random() * 50),
-              },
-              {
-                tagId: Math.floor(Math.random() * 50),
-              },
-              {
-                tagId: Math.floor(Math.random() * 50),
-              },
-            ],
-          },
-          authors: {
-            connect: [
-              {
-                authorId: Math.floor(Math.random() * 50),
-              },
-              {
-                authorId: Math.floor(Math.random() * 50),
-              },
-              {
-                authorId: Math.floor(Math.random() * 50),
-              },
-            ],
-          },
+    const sub = await dbclient.submission.create({
+      data: element,
+    });
+    dbclient.submission.update({
+      where: { id: sub.id },
+      data: {
+        tags: {
+          connect: [
+            { id: Math.floor(Math.random() * 50) },
+            { id: Math.floor(Math.random() * 50) },
+            { id: Math.floor(Math.random() * 50) },
+          ],
         },
-      })
-      .then(() => {
-        console.log("done seeding submissions");
-      });
+        authors: {
+          connect: [
+            { id: Math.floor(Math.random() * 50) },
+            { id: Math.floor(Math.random() * 50) },
+            { id: Math.floor(Math.random() * 50) },
+          ],
+        },
+      },
+    });
   });
 };
 export default seedSubmissions;

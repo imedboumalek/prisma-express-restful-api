@@ -8,21 +8,21 @@ datasource db {
 }
 
 model Author {
-  id          Int                 @id @default(autoincrement())
-  email       String              @unique @db.VarChar(320)
-  password    String              @db.VarChar(60)
-  salt        String              @db.VarChar(60)
-  jwt         String?              @db.VarChar(320)
-  username    String              @unique @db.VarChar(50)
-  first_name  String              @default("") @db.VarChar(50)
-  last_name   String              @default("") @db.VarChar(50)
+  id          Int           @id @default(autoincrement())
+  email       String        @unique @db.VarChar(320)
+  password    String        @db.VarChar(60)
+  salt        String        @db.VarChar(60)
+  jwt         String?       @db.VarChar(320)
+  username    String        @unique @db.VarChar(50)
+  first_name  String        @default("") @db.VarChar(50)
+  last_name   String        @default("") @db.VarChar(50)
   countryId   Int?
   orgId       Int?
-  submissions SubmissionAuthors[]
-  country     Country?             @relation(fields: [countryId], references: [id])
-  org         Organization?        @relation(fields: [orgId], references: [id])
-  updatedAt   DateTime            @updatedAt
-  createdAt   DateTime            @db.Timestamp @default(now())
+  submissions Submission[]
+  country     Country?      @relation(fields: [countryId], references: [id])
+  org         Organization? @relation(fields: [orgId], references: [id])
+  updatedAt   DateTime      @updatedAt
+  createdAt   DateTime      @default(now()) @db.Timestamp
 }
 
 model Conference {
@@ -32,9 +32,9 @@ model Conference {
   sub_limit_date DateTime?    @db.Timestamp(6)
   createdAt      DateTime     @db.Timestamp
   updatedAt      DateTime     @updatedAt
-  submissions    ConferenceSubmissions[]
-  topicId Int
-  topic Topic @relation(fields: [topicId], references: [id])
+  submissions    Submission[]
+  topicId        Int
+  topic          Topic        @relation(fields: [topicId], references: [id])
   countryId      Int
   country        Country      @relation(fields: [countryId], references: [id])
   organizerId    Int
@@ -62,54 +62,54 @@ model Organization {
 }
 
 model Submission {
-  id              Int                 @id @default(autoincrement())
-  title           String?             @db.VarChar(256)
+  id              Int          @id @default(autoincrement())
+  title           String?      @db.VarChar(256)
   resume          String?
-  url             String?             @db.VarChar(512)
-  topicId        Int
-  topic          Topic              @relation(fields: [topicId], references: [id])
-  tags            SubmissionTags[]
-  conferences     ConferenceSubmissions[]
-  authors         SubmissionAuthors[]
-  updatedAt       DateTime            @updatedAt
-  submission_date DateTime            @default(now()) @db.Timestamp(6)
+  url             String?      @db.VarChar(512)
+  topicId         Int
+  topic           Topic        @relation(fields: [topicId], references: [id])
+  tags            Tag[]
+  conferences     Conference[]
+  authors         Author[]
+  updatedAt       DateTime     @updatedAt
+  submission_date DateTime     @default(now()) @db.Timestamp(6)
 
 }
 
-model SubmissionAuthors {
-  author       Author     @relation(fields: [authorId], references: [id])
-  authorId     Int
-  submission   Submission @relation(fields: [submissionId], references: [id])
-  submissionId Int
+// model SubmissionAuthors {
+//   author       Author     @relation(fields: [authorId], references: [id])
+//   authorId     Int
+//   submission   Submission @relation(fields: [submissionId], references: [id])
+//   submissionId Int
 
-  @@id([authorId, submissionId])
-}
-model ConferenceSubmissions {
-  submission   Submission @relation(fields: [submissionId], references: [id])
-  submissionId Int
-  conference   Conference  @relation(fields: [conferenceId], references: [id])
-  conferenceId Int
+//   @@id([authorId, submissionId])
+// }
+// model ConferenceSubmissions {
+//   submission   Submission @relation(fields: [submissionId], references: [id])
+//   submissionId Int
+//   conference   Conference  @relation(fields: [conferenceId], references: [id])
+//   conferenceId Int
 
-  @@id([submissionId, conferenceId])
-}
+//   @@id([submissionId, conferenceId])
+// }
 model Tag {
-  id          Int              @id @default(autoincrement())
-  title       String           @default("") @db.VarChar(50)
-  submissions SubmissionTags[]
+  id          Int          @id @default(autoincrement())
+  title       String       @default("") @db.VarChar(50)
+  submissions Submission[]
 }
 
-model SubmissionTags {
-  tagId  Int
-  tag    Tag        @relation(fields: [tagId], references: [id])
-  postId Int
-  post   Submission @relation(fields: [postId], references: [id])
+// model SubmissionTags {
+//   tagId  Int
+//   tag    Tag        @relation(fields: [tagId], references: [id])
+//   postId Int
+//   post   Submission @relation(fields: [postId], references: [id])
 
-  @@id([tagId, postId])
-}
+//   @@id([tagId, postId])
+// }
 
 model Topic {
-  id   Int    @id @default(autoincrement())
-  name String @default("") @db.VarChar(128)
+  id          Int          @id @default(autoincrement())
+  name        String       @default("") @db.VarChar(128)
   conferences Conference[]
   submissions Submission[]
 }
