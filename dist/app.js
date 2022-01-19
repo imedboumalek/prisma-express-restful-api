@@ -25,7 +25,9 @@ function main() {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         dotenv_1.default.config();
-        prisma_client_1.default.$connect();
+        yield prisma_client_1.default.$connect().then(() => {
+            console.log("connected to prisma");
+        });
         const app = (0, express_1.default)();
         app.use((0, morgan_1.default)("dev"));
         app.use(express_1.default.json());

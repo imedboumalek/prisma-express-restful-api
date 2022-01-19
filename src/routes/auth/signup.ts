@@ -1,37 +1,89 @@
 import express from "express";
 const router = express.Router();
 import prisma from "../../prisma-client";
-router.post("/signup", async (req, res) => {
-  const { username, email } = req.body;
-  console.log(username, email);
+import bcrypt from "bcrypt";
+import jose from "jose";
 
-  if (username && email) {
-    const usedCredentials = await prisma.author.count({
-      where: {
-        OR: [username, email],
-      },
-    });
-    console.log("usedCredentials", usedCredentials);
-
-    if (usedCredentials) {
-      res.status(400).json({
-        message: "Username or email already exists",
-      });
-      return;
-    }
-    res.sendStatus(200).json({
-      message: "congratulations, you have signed up",
-    });
-  } else {
+const checkRequiredFields = (req, res, next) => {
+  const { username, email, password } = req.body;
+  if (!username || !email || !password) {
     res.status(400).json({
-      message: "Please provide username and email",
+      message: "Please provide username, email and password",
     });
+    return;
   }
-});
+
+  next();
+};
+// all should be strings
+
+const validateCredentials = async (req, res, next) => {
+  const { username, password, email } = req.body;
+  let response: Map<string, string>;
+  if (typeof username !== "string" || username.length < 3) {
+    response["username"] =
+      "Username must be a string & at least 3 characters long";
+  }
+  if (typeof password !== "string" || password.length < 8) {
+    response["password"] = "Password must be at least 8 characters long";
+  }
+  if (typeof email !== "string" || !email.includes("@")) {
+    response["email"] = "Email must be a valid email";
+  }
+  if (response) {
+    res.status(400).json(response);
+    return;
+  }
+  next();
+};
+
+const checkCredentialExistance = async (req, res, next) => {
+  const { username, email } = req.body;
+  const usedCredentials =
+    (await prisma.author.count({
+      where: {
+        OR: [{ email: email }, { username: username }],
+      },
+    })) !== 0;
+  console.log("usedCredentials", usedCredentials);
+  if (usedCredentials) {
+    res.status(400).json({
+      message: "Username or email already exists",
+    });
+    return;
+  }
+  next();
+};
+const signup = async (req, res) => {
+  const { username, email, password } = req.body;
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  const newAuthor = await prisma.author.create({
+    data: {
+      username: username,
+      email: email,
+      password: hashedPassword,
+      salt: salt,
+    },
+  });
+  res.status(200).json({
+    newAuthor,
+  });
+};
+
+router.post(
+  "/signup",
+  checkRequiredFields,
+  checkCredentialExistance,
+  valida,
+  signup
+);
 router.all("/signup", (req, res) => {
   // return method not allowed
   res.status(405).send({
     message: "Method not allowed",
   });
 });
+
 export default router;

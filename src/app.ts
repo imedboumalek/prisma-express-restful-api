@@ -7,11 +7,11 @@ import authRouter from "./routes/auth/auth";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerSpecs from "./swagger-config";
-import prisma from "./prisma-client";
+import dbclient from "./prisma-client";
 
 async function main() {
   dotenv.config();
-  await prisma.$connect().then(() => {
+  await dbclient.$connect().then(() => {
     console.log("connected to prisma");
   });
 
@@ -31,5 +31,5 @@ async function main() {
 }
 
 main().finally(() => {
-  prisma.$disconnect();
+  dbclient.$disconnect();
 });
