@@ -7,8 +7,8 @@ const seedAuthors = async () => {
   while (count < 50) {
     authors.push({
       email: faker.internet.email(),
-      password: "$2b$10$rDJg9yXI2NmCvOQaBV5qKea6yYKnlNsha2oUCwhA3LkbH8uiIB6u6",
-      salt: "$2b$10$rDJg9yXI2NmCvOQaBV5qKe",
+      password: "$2b$10$jVjDsrUukI914p8goB5YLepxAKD9t5bC17avbLgrriS.d4OzeBqyC",
+      salt: "$2b$10$jVjDsrUukI914p8goB5YLe",
       jwt: null,
       username: faker.internet.userName(),
       first_name: faker.name.firstName(),

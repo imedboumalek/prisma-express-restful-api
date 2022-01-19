@@ -54,7 +54,13 @@ authorsRouter.get("/authors/current", (req, res) => {
         include: {
           country: true,
           org: true,
-          submissions: true,
+          submissions: {
+            include: {
+              topic: true,
+              conferences: true,
+              tags: true,
+            },
+          },
         },
       })
       .then((author) => {
