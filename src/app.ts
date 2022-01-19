@@ -8,6 +8,7 @@ import countryRouter from "./routes/countries/countries";
 
 import docs from "./swagger-config";
 import dbclient from "./prisma-client";
+import submissionsRouter from "./routes/submissions/submissions";
 
 async function main() {
   dotenv.config();
@@ -25,6 +26,7 @@ async function main() {
   app.use(countryRouter);
   app.use(authRouter);
   app.use(authorsRouter);
+  app.use(submissionsRouter);
   app.listen(process.env.PORT ?? 8080, () => {
     // console.log("hello");
     console.log(`Server is running on port ${process.env.PORT ?? 8080}`);
