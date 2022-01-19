@@ -39,7 +39,6 @@ const checkRequiredFields = (req, res, next) => {
     }
     next();
 };
-// all should be strings
 const validateCredentials = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password, email, first_name, last_name } = req.body;
     let response;
@@ -108,7 +107,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         iat: Math.floor(Date.now() / 1000),
     }, process.env.JWT_SECRET);
     console.log("token", token);
-    yield prisma_client_2.default.author
+    prisma_client_2.default.author
         .update({
         where: {
             id: newAuthor.id,
@@ -119,9 +118,9 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     })
         .then(() => {
         console.log("updated jwt");
-    });
-    res.status(200).json({
-        access_token: token,
+        res.status(200).json({
+            access_token: token,
+        });
     });
 });
 router.post("/signup", checkRequiredFields, checkCredentialExistance, validateCredentials, signup);

@@ -16,7 +16,6 @@ const checkRequiredFields = (req, res, next) => {
 
   next();
 };
-// all should be strings
 
 const validateCredentials = async (req, res, next) => {
   const { username, password, email, first_name, last_name } = req.body;
@@ -94,7 +93,7 @@ const signup = async (req, res) => {
     process.env.JWT_SECRET
   );
   console.log("token", token);
-  await dbclient.author
+  dbclient.author
     .update({
       where: {
         id: newAuthor.id,
@@ -105,10 +104,10 @@ const signup = async (req, res) => {
     })
     .then(() => {
       console.log("updated jwt");
+      res.status(200).json({
+        access_token: token,
+      });
     });
-  res.status(200).json({
-    access_token: token,
-  });
 };
 
 router.post(
