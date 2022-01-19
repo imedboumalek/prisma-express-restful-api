@@ -63,7 +63,8 @@ const checkCredentialExistance = async (req, res, next) => {
   next();
 };
 const signup = async (req, res) => {
-  const { username, email, password, first_name, last_name } = req.body;
+  const { username, email, password, first_name, last_name, countryId, orgId } =
+    req.body;
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -76,6 +77,8 @@ const signup = async (req, res) => {
         first_name: first_name,
         last_name: last_name,
         salt: salt,
+        countryId: countryId,
+        orgId: orgId,
       },
     })
     .then((author) => {
