@@ -4,6 +4,7 @@ import logger from "morgan";
 import dotenv from "dotenv";
 import mainRouter from "./routes/authors/authors";
 import authRouter from "./routes/auth/auth";
+import countryRouter from "./routes/countries/countries";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerSpecs from "./swagger-config";
@@ -23,6 +24,7 @@ async function main() {
 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
   app.use(mainRouter);
+  app.use(countryRouter);
   app.use(authRouter);
   app.listen(process.env.PORT ?? 8080, () => {
     // console.log("hello");

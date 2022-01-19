@@ -45,6 +45,7 @@ model Conference {
 model Country {
   id          Int            @id @default(autoincrement())
   name        String         @db.VarChar(128)
+  code        String         @db.VarChar(2)
   authors     Author[]
   orgs        Organization[]
   conferences Conference[]
