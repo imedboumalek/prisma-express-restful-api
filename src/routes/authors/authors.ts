@@ -1,9 +1,28 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import express from "express";
-const router = express.Router();
+import dbclient from "../../prisma-client";
+const authorsRouter = express.Router();
+authorsRouter.get("/authors", (req, res) => {
+  dbclient.author.findMany().then((authors) => {
+    const authorsFiltered = authors.map((e) => {
+      const {
+        createdAt,
+        updatedAt,
+        username,
+        email,
+        password,
+        jwt,
+        salt,
+        ...theRest
+      } = e;
 
-/* GET users listing. */
-router.get("/", function (req, res) {
+      return theRest;
+    });
+    res.json(authorsFiltered);
+  });
+});
+authorsRouter.get("/authors/current", (req, res) => {
   res.send("respond with a resource");
 });
 
-export default router;
+export default authorsRouter;
