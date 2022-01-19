@@ -2,7 +2,8 @@ import express from "express";
 const router = express.Router();
 import prisma from "../../prisma-client";
 import bcrypt from "bcrypt";
-import jose from "jose";
+import jsonwebtoken from "jsonwebtoken";
+import dbclient from "../../prisma-client";
 
 const checkRequiredFields = (req, res, next) => {
   const { username, email, password } = req.body;
@@ -30,10 +31,10 @@ const validateCredentials = async (req, res, next) => {
   if (typeof email !== "string" || !email.includes("@")) {
     response["email"] = "Email must be a valid email";
   }
-  if (typeof first_name !== "string") {
+  if (first_name && typeof first_name !== "string") {
     response["first_name"] = "First name must be a string";
   }
-  if (typeof last_name !== "string") {
+  if (last_name && typeof last_name !== "string") {
     response["last_name"] = "Last name must be a string";
   }
 
@@ -75,15 +76,35 @@ const signup = async (req, res) => {
         first_name: first_name,
         last_name: last_name,
         salt: salt,
-        jwt: "zaa3ma jwt ak chayef",
       },
     })
     .then((author) => {
       const { salt, password, jwt, ...therest } = author;
       return therest;
     });
+  const token = jsonwebtoken.sign(
+    {
+      sub: newAuthor.id,
+      username: newAuthor.username,
+      iat: Math.floor(Date.now() / 1000),
+    },
+    process.env.JWT_SECRET
+  );
+  console.log("token", token);
+  await dbclient.author
+    .update({
+      where: {
+        id: newAuthor.id,
+      },
+      data: {
+        jwt: token,
+      },
+    })
+    .then(() => {
+      console.log("updated jwt");
+    });
   res.status(200).json({
-    ...newAuthor,
+    access_token: token,
   });
 };
 
