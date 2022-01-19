@@ -17,7 +17,7 @@ const main = async () => {
   await seedTags();
   await seedOrgs();
   await seedAuthors();
-  await seedSubmissions();
+  await seedSubmissions().then(() => console.log("done seeding submissions"));
   console.log("done seeding");
 };
 
