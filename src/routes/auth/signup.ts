@@ -18,7 +18,7 @@ const checkRequiredFields = (req, res, next) => {
 // all should be strings
 
 const validateCredentials = async (req, res, next) => {
-  const { username, password, email } = req.body;
+  const { username, password, email, first_name, last_name } = req.body;
   let response: Map<string, string>;
   if (typeof username !== "string" || username.length < 3) {
     response["username"] =
@@ -30,6 +30,13 @@ const validateCredentials = async (req, res, next) => {
   if (typeof email !== "string" || !email.includes("@")) {
     response["email"] = "Email must be a valid email";
   }
+  if (typeof first_name !== "string") {
+    response["first_name"] = "First name must be a string";
+  }
+  if (typeof last_name !== "string") {
+    response["last_name"] = "Last name must be a string";
+  }
+
   if (response) {
     res.status(400).json(response);
     return;
@@ -55,7 +62,7 @@ const checkCredentialExistance = async (req, res, next) => {
   next();
 };
 const signup = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, first_name, last_name } = req.body;
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -65,6 +72,8 @@ const signup = async (req, res) => {
         username: username,
         email: email,
         password: hashedPassword,
+        first_name: first_name,
+        last_name: last_name,
         salt: salt,
         jwt: "zaa3ma jwt ak chayef",
       },
