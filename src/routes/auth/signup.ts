@@ -67,8 +67,20 @@ const signup = async (req, res) => {
       salt: salt,
     },
   });
+  const jwt = await new jose.SignJWT({
+    header: {
+      alg: "HS256",
+      typ: "JWT",
+    },
+    payload: {
+      username: newAuthor.username,
+      email: newAuthor.email,
+      id: newAuthor.id,
+    },
+  });
   res.status(200).json({
     newAuthor,
+    "access-token": jwt,
   });
 };
 
@@ -76,7 +88,7 @@ router.post(
   "/signup",
   checkRequiredFields,
   checkCredentialExistance,
-  valida,
+  validateCredentials,
   signup
 );
 router.all("/signup", (req, res) => {

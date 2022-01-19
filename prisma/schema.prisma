@@ -12,17 +12,17 @@ model Author {
   email       String              @unique @db.VarChar(320)
   password    String              @db.VarChar(60)
   salt        String              @db.VarChar(60)
-  jwt         String              @db.VarChar(320)
+  jwt         String?              @db.VarChar(320)
   username    String              @unique @db.VarChar(50)
   first_name  String              @default("") @db.VarChar(50)
   last_name   String              @default("") @db.VarChar(50)
-  countryId   Int
-  orgId       Int
+  countryId   Int?
+  orgId       Int?
   submissions SubmissionAuthors[]
-  country     Country             @relation(fields: [countryId], references: [id])
-  org         Organization        @relation(fields: [orgId], references: [id])
+  country     Country?             @relation(fields: [countryId], references: [id])
+  org         Organization?        @relation(fields: [orgId], references: [id])
   updatedAt   DateTime            @updatedAt
-  createdAt   DateTime            @db.Timestamp
+  createdAt   DateTime            @db.Timestamp @default(now())
 }
 
 model Conference {
