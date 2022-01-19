@@ -59,28 +59,22 @@ const signup = async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  const newAuthor = await prisma.author.create({
-    data: {
-      username: username,
-      email: email,
-      password: hashedPassword,
-      salt: salt,
-    },
-  });
-  const jwt = await new jose.SignJWT({
-    header: {
-      alg: "HS256",
-      typ: "JWT",
-    },
-    payload: {
-      username: newAuthor.username,
-      email: newAuthor.email,
-      id: newAuthor.id,
-    },
-  });
+  const newAuthor = await prisma.author
+    .create({
+      data: {
+        username: username,
+        email: email,
+        password: hashedPassword,
+        salt: salt,
+        jwt: "zaa3ma jwt ak chayef",
+      },
+    })
+    .then((author) => {
+      const { salt, password, jwt, ...therest } = author;
+      return therest;
+    });
   res.status(200).json({
-    newAuthor,
-    "access-token": jwt,
+    ...newAuthor,
   });
 };
 
