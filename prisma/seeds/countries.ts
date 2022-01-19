@@ -1,10 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import dbclient from "./main";
 
-const dbclient = new PrismaClient();
-async function main() {
-  await dbclient.$connect().then(() => {
-    console.log("connected to prisma");
-  });
+async function seedCountries() {
   await dbclient.country
     .createMany({
       data: [
@@ -259,7 +255,4 @@ async function main() {
     });
 }
 
-main().finally(() => {
-  dbclient.$disconnect();
-  console.log("disconnected");
-});
+export default seedCountries;
