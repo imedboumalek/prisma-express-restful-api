@@ -15,28 +15,31 @@ const seedSubmissions = async () => {
     const sub = await dbclient.submission.create({
       data: element,
     });
-    dbclient.submission
-      .update({
-        where: { id: sub.id },
-        data: {
-          tags: {
-            connect: [
-              { id: Math.floor(Math.random() * 20) },
-              { id: Math.floor(Math.random() * 20) },
-              { id: Math.floor(Math.random() * 20) },
-            ],
-          },
-          authors: {
-            connect: [
-              { id: Math.floor(Math.random() * 20) },
-              { id: Math.floor(Math.random() * 20) },
-            ],
-          },
+    await dbclient.submission.update({
+      where: { id: sub.id },
+      data: {
+        tags: {
+          connect: [
+            {
+              id: Math.floor(Math.random() * 49),
+            },
+            {
+              id: Math.floor(Math.random() * 49),
+            },
+          ],
         },
-      })
-      .then((v) => {
-        console.log(v);
-      });
+        authors: {
+          connect: [
+            {
+              id: Math.floor(Math.random() * 49),
+            },
+            {
+              id: Math.floor(Math.random() * 49),
+            },
+          ],
+        },
+      },
+    });
   });
 };
 export default seedSubmissions;
