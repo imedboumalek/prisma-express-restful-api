@@ -5,7 +5,7 @@ const seedTags = async () => {
   let count = 0;
   while (count < 50) {
     tags.push({
-      name: faker.lorem.word(),
+      title: faker.lorem.word(),
     });
     count++;
   }

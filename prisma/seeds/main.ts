@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import seedAuthors from "./authors";
 import seedCountries from "./countries";
 import seedOrgs from "./organization";
+import seedSubmissions from "./submissions";
 import seedTags from "./tags";
 import seedTopics from "./topics";
 
@@ -16,6 +17,7 @@ const main = async () => {
   await seedTags();
   await seedOrgs();
   await seedAuthors();
+  await seedSubmissions();
   console.log("done seeding");
 };
 

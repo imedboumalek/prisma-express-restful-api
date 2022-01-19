@@ -63,16 +63,16 @@ model Organization {
 
 model Submission {
   id              Int                 @id @default(autoincrement())
-  submission_date DateTime            @default(now()) @db.Timestamp(6)
-  updatedAt       DateTime            @updatedAt
-  authors         SubmissionAuthors[]
   title           String?             @db.VarChar(256)
   resume          String?
   url             String?             @db.VarChar(512)
-  tags            SubmissionTags[]
-  conferences     ConferenceSubmissions[]
   topicId        Int
   topic          Topic              @relation(fields: [topicId], references: [id])
+  tags            SubmissionTags[]
+  conferences     ConferenceSubmissions[]
+  authors         SubmissionAuthors[]
+  updatedAt       DateTime            @updatedAt
+  submission_date DateTime            @default(now()) @db.Timestamp(6)
 
 }
 
