@@ -3,7 +3,8 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import dotenv from "dotenv";
 import mainRouter from "./routes/authors/authors";
-import authRouter from "./routes/auth/login";
+import authRouter from "./routes/auth/auth";
+
 dotenv.config();
 const app = express();
 
@@ -16,5 +17,3 @@ app.use(authRouter);
 app.listen(process.env.PORT ?? 8080, () => {
   console.log(`Server is running on port ${process.env.PORT ?? 8080}`);
 });
-
-export default app;
