@@ -27,6 +27,8 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const prisma_client_1 = __importDefault(require("../../prisma-client"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const prisma_client_2 = __importDefault(require("../../prisma-client"));
 const checkRequiredFields = (req, res, next) => {
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
@@ -51,10 +53,10 @@ const validateCredentials = (req, res, next) => __awaiter(void 0, void 0, void 0
     if (typeof email !== "string" || !email.includes("@")) {
         response["email"] = "Email must be a valid email";
     }
-    if (typeof first_name !== "string") {
+    if (first_name && typeof first_name !== "string") {
         response["first_name"] = "First name must be a string";
     }
-    if (typeof last_name !== "string") {
+    if (last_name && typeof last_name !== "string") {
         response["last_name"] = "Last name must be a string";
     }
     if (response) {
@@ -92,14 +94,33 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             first_name: first_name,
             last_name: last_name,
             salt: salt,
-            jwt: "zaa3ma jwt ak chayef",
         },
     })
         .then((author) => {
         const { salt, password, jwt } = author, therest = __rest(author, ["salt", "password", "jwt"]);
         return therest;
     });
-    res.status(200).json(Object.assign({}, newAuthor));
+    const token = jsonwebtoken_1.default.sign({
+        sub: newAuthor.id,
+        username: newAuthor.username,
+        iat: Math.floor(Date.now() / 1000),
+    }, process.env.JWT_SECRET);
+    console.log("token", token);
+    yield prisma_client_2.default.author
+        .update({
+        where: {
+            id: newAuthor.id,
+        },
+        data: {
+            jwt: token,
+        },
+    })
+        .then(() => {
+        console.log("updated jwt");
+    });
+    res.status(200).json({
+        access_token: token,
+    });
 });
 router.post("/signup", checkRequiredFields, checkCredentialExistance, validateCredentials, signup);
 router.all("/signup", (req, res) => {
