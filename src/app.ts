@@ -27,9 +27,9 @@ async function main() {
   app.use(authRouter);
   app.use(authorsRouter);
   app.use(submissionsRouter);
-  app.listen(process.env.PORT ?? 8080, () => {
+  app.listen(process.env.PORT ?? 5000, () => {
     // console.log("hello");
-    console.log(`Server is running on port ${process.env.PORT ?? 8080}`);
+    console.log(`Server is running on port ${process.env.PORT ?? 5000}`);
   });
 }
 

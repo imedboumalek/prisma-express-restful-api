@@ -39,10 +39,10 @@ function main() {
         app.use(auth_1.default);
         app.use(authors_1.default);
         app.use(submissions_1.default);
-        app.listen((_a = process.env.PORT) !== null && _a !== void 0 ? _a : 8080, () => {
+        app.listen((_a = process.env.PORT) !== null && _a !== void 0 ? _a : 5000, () => {
             var _a;
             // console.log("hello");
-            console.log(`Server is running on port ${(_a = process.env.PORT) !== null && _a !== void 0 ? _a : 8080}`);
+            console.log(`Server is running on port ${(_a = process.env.PORT) !== null && _a !== void 0 ? _a : 5000}`);
         });
     });
 }
