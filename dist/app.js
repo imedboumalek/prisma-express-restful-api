@@ -22,6 +22,7 @@ const countries_1 = __importDefault(require("./routes/countries/countries"));
 const swagger_config_1 = __importDefault(require("./swagger-config"));
 const prisma_client_1 = __importDefault(require("./prisma-client"));
 const submissions_1 = __importDefault(require("./routes/submissions/submissions"));
+const helmet_1 = __importDefault(require("helmet"));
 function main() {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -31,6 +32,7 @@ function main() {
         });
         const app = (0, express_1.default)();
         app.use((0, morgan_1.default)("dev"));
+        app.use((0, helmet_1.default)());
         app.use(express_1.default.json());
         app.use(express_1.default.urlencoded({ extended: false }));
         app.use((0, cookie_parser_1.default)());
