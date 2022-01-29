@@ -16,12 +16,12 @@ const express_1 = __importDefault(require("express"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const morgan_1 = __importDefault(require("morgan"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const authors_1 = __importDefault(require("./routes/authors/authors"));
-const auth_1 = __importDefault(require("./routes/auth/auth"));
-const countries_1 = __importDefault(require("./routes/countries/countries"));
+const authors_1 = __importDefault(require("./routes/authors"));
+const auth_1 = __importDefault(require("./routes/auth"));
+const countries_1 = __importDefault(require("./routes/countries"));
+const submissions_1 = __importDefault(require("./routes/submissions"));
 const swagger_config_1 = __importDefault(require("./swagger-config"));
 const prisma_client_1 = __importDefault(require("./prisma-client"));
-const submissions_1 = __importDefault(require("./routes/submissions/submissions"));
 const helmet_1 = __importDefault(require("helmet"));
 function main() {
     var _a;
