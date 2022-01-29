@@ -1,9 +1,8 @@
-import express from "express";
 import dbclient from "../prisma-client";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
 import { Author } from "@prisma/client";
-const router = express.Router();
+import { Router } from "express";
 const checkRequiredFieldsForSignIn = (req, res, next) => {
   console.log("login");
 
@@ -36,7 +35,7 @@ const checkUserExistance = async (req, res, next) => {
   res.locals.user = user;
   next();
 };
-const checkPassword = async (req, res, next) => {
+export const checkPassword = async (req, res, next) => {
   const { password } = req.body;
   const user: Author = res.locals.user;
   const hashedPassword = await bcrypt.hash(password, user.salt);
@@ -69,18 +68,9 @@ const returnJWT = async (req, res) => {
   });
 };
 
-router.post(
-  "/login",
+export default Router().use(
   checkRequiredFieldsForSignIn,
   checkUserExistance,
   checkPassword,
   returnJWT
 );
-
-router.all("/login", (req, res) => {
-  // return method not allowed
-  res.status(405).send({
-    message: "Method not allowed",
-  });
-});
-export default router;

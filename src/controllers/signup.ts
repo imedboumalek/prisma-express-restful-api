@@ -1,11 +1,9 @@
-import express from "express";
-const router = express.Router();
 import prisma from "../prisma-client";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
-import dbclient from "../prisma-client";
+import { Router } from "express";
 
-const checkRequiredFields = (req, res, next) => {
+const checkRequiredFieldsForSignUp = (req, res, next) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
     res.status(400).json({
@@ -17,7 +15,7 @@ const checkRequiredFields = (req, res, next) => {
   next();
 };
 
-const validateCredentials = async (req, res, next) => {
+const validateSignUpCredentials = async (req, res, next) => {
   const { username, password, email, first_name, last_name } = req.body;
   let response: Map<string, string>;
   if (typeof username !== "string" || username.length < 3) {
@@ -44,7 +42,7 @@ const validateCredentials = async (req, res, next) => {
   next();
 };
 
-const checkCredentialExistance = async (req, res, next) => {
+const checkIfCredsAreUsed = async (req, res, next) => {
   const { username, email } = req.body;
   const usedCredentials =
     (await prisma.author.count({
@@ -97,19 +95,9 @@ const signup = async (req, res) => {
     access_token: token,
   });
 };
-
-router.post(
-  "/signup",
-  checkRequiredFields,
-  checkCredentialExistance,
-  validateCredentials,
+export default Router().use(
+  checkRequiredFieldsForSignUp,
+  validateSignUpCredentials,
+  checkIfCredsAreUsed,
   signup
 );
-router.all("/signup", (req, res) => {
-  // return method not allowed
-  res.status(405).send({
-    message: "Method not allowed",
-  });
-});
-
-export default router;
