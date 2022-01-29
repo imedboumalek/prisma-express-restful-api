@@ -12,7 +12,6 @@ model Author {
   email       String        @unique @db.VarChar(320)
   password    String        @db.VarChar(60)
   salt        String        @db.VarChar(60)
-  jwt         String?       @db.VarChar(320)
   username    String        @unique @db.VarChar(50)
   first_name  String        @default("") @db.VarChar(50)
   last_name   String        @default("") @db.VarChar(50)
