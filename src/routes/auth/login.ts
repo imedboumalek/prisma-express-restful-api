@@ -53,19 +53,6 @@ router.post("/login", checkRequiredFields, async (req, res) => {
     },
     process.env.JWT_SECRET
   );
-  await dbclient.author
-    .update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        jwt: token,
-      },
-    })
-
-    .then(() => {
-      console.log("updated jwt");
-    });
 
   res.status(200).json({
     access_token: token,

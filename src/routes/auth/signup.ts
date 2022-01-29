@@ -81,7 +81,7 @@ const signup = async (req, res) => {
       },
     })
     .then((author) => {
-      const { salt, password, jwt, ...therest } = author;
+      const { salt, password, ...therest } = author;
       return therest;
     });
   const token = jsonwebtoken.sign(
@@ -92,22 +92,10 @@ const signup = async (req, res) => {
     },
     process.env.JWT_SECRET
   );
-  console.log("token", token);
-  dbclient.author
-    .update({
-      where: {
-        id: newAuthor.id,
-      },
-      data: {
-        jwt: token,
-      },
-    })
-    .then(() => {
-      console.log("updated jwt");
-      res.status(200).json({
-        access_token: token,
-      });
-    });
+
+  res.status(200).json({
+    access_token: token,
+  });
 };
 
 router.post(
