@@ -1,5 +1,5 @@
 import { Router } from "express";
-import dbclient from "../../prisma-client";
+import dbclient from "../prisma-client";
 
 const submissionsRouter = Router();
 

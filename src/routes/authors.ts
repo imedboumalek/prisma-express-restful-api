@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import express from "express";
 import jwt from "jsonwebtoken";
-import dbclient from "../../prisma-client";
+import dbclient from "../prisma-client";
 const authorsRouter = express.Router();
 authorsRouter.get("/authors", (req, res) => {
   dbclient.author
@@ -19,7 +19,7 @@ authorsRouter.get("/authors", (req, res) => {
           username,
           email,
           password,
-          jwt,
+
           salt,
           ...theRest
         } = e;
@@ -64,7 +64,7 @@ authorsRouter.get("/authors/current", (req, res) => {
         },
       })
       .then((author) => {
-        const { salt, password, jwt, ...theRest } = author;
+        const { salt, password, ...theRest } = author;
         res.json(theRest);
       });
   });

@@ -1,9 +1,9 @@
 import express from "express";
 const router = express.Router();
-import prisma from "../../prisma-client";
+import prisma from "../prisma-client";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
-import dbclient from "../../prisma-client";
+import dbclient from "../prisma-client";
 
 const checkRequiredFields = (req, res, next) => {
   const { username, email, password } = req.body;

@@ -1,5 +1,5 @@
 import express from "express";
-import dbclient from "../../prisma-client";
+import dbclient from "../prisma-client";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
 const router = express.Router();

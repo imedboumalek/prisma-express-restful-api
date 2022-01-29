@@ -2,13 +2,12 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import dotenv from "dotenv";
-import authorsRouter from "./routes/authors/authors";
-import authRouter from "./routes/auth/auth";
-import countryRouter from "./routes/countries/countries";
-
+import authorsRouter from "./routes/authors";
+import authRouter from "./routes/auth";
+import countryRouter from "./routes/countries";
+import submissionsRouter from "./routes/submissions";
 import docs from "./swagger-config";
 import dbclient from "./prisma-client";
-import submissionsRouter from "./routes/submissions/submissions";
 import helmet from "helmet";
 
 async function main() {
