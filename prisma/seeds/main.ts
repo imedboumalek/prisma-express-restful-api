@@ -9,6 +9,11 @@ import seedTopics from "./topics";
 const dbclient = new PrismaClient();
 export default dbclient;
 const main = async () => {
+  // log env vars
+  console.log(process.env.NODE_ENV);
+  console.log(process.env.PORT);
+  console.log(process.env.DATABASE_URL);
+  console.log(process.env.JWT_SECRET);
   await dbclient.$connect();
 
   //NOTE: didn't use Promise.all on purpose.

@@ -7,10 +7,10 @@
     "prestart": "npm run build",
     "start": "nodemon src/app.ts",
     "serve": "node dist/app.js",
-    "init-test-db": "dotenv -e .env.test -- npx prisma migrate dev --name testing-init",
-    "postinit-test-db": "ts-node prisma/seeds/main.ts",
+    "init-test-db": "dotenv -e .env.test -- npx prisma migrate reset",
+    "postinit-test-db": "dotenv -e .env.test -- ts-node prisma/seeds/main.ts",
     "pretest": "npm run init-test-db",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' env NODE_ENV='test' mocha -r ts-node/register 'tests/**/*.ts'"
+    "test": "dotenv -e .env.test -- env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' env NODE_ENV='test' mocha -r ts-node/register 'tests/**/*.ts'"
   },
   "engines": {
     "node": "17.3.1"

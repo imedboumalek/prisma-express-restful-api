@@ -20,7 +20,7 @@ const express_1 = require("express");
 const checkRequiredFieldsForSignIn = (req, res, next) => {
     const { username, password } = req.body;
     if (!username || !password) {
-        res.status(400).json({
+        res.status(403).json({
             message: "Please provide username and password",
         });
         return;
@@ -59,7 +59,6 @@ const checkPassword = (req, res, next) => __awaiter(void 0, void 0, void 0, func
 exports.checkPassword = checkPassword;
 const returnJWT = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = res.locals.user;
-    console.log(user);
     const token = jsonwebtoken_1.default.sign({
         sub: user.id,
         username: user.username,

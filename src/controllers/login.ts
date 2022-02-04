@@ -49,7 +49,6 @@ export const checkPassword = async (req, res, next) => {
 
 const returnJWT = async (req, res) => {
   const user: Author = res.locals.user;
-  console.log(user);
   const token = jsonwebtoken.sign(
     {
       sub: user.id,
