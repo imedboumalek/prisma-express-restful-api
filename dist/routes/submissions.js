@@ -12,20 +12,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
+const express_1 = __importDefault(require("express"));
 const prisma_client_1 = __importDefault(require("../prisma-client"));
-const submissionsRouter = (0, express_1.Router)();
+const submissionsRouter = express_1.default.Router();
 submissionsRouter.get("/submissions", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield prisma_client_1.default.submission
-        .findMany({
-        include: {
-            authors: true,
-            topic: true,
-            conferences: true,
-            tags: true,
-        },
-    })
-        .then(res.json);
+    try {
+        const response = yield prisma_client_1.default.submission.findMany({
+            include: {
+                authors: true,
+                topic: true,
+                conferences: true,
+                tags: true,
+            },
+        });
+        res.json(response);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Internal server error",
+        });
+    }
 }));
 const checkRequiredFields = (req, res, next) => {
     const { title, authors, topic, conferences, tags } = req.body;
