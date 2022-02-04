@@ -21,20 +21,20 @@ const seedSubmissions = async () => {
         tags: {
           connect: [
             {
-              id: Math.floor(Math.random() * 49),
+              id: 3,
             },
             {
-              id: Math.floor(Math.random() * 49),
+              id: 5,
             },
           ],
         },
         authors: {
           connect: [
             {
-              id: Math.floor(Math.random() * 49),
+              id: 1,
             },
             {
-              id: Math.floor(Math.random() * 49),
+              id: 5,
             },
           ],
         },

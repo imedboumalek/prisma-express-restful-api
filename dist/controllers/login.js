@@ -59,6 +59,7 @@ const checkPassword = (req, res, next) => __awaiter(void 0, void 0, void 0, func
 exports.checkPassword = checkPassword;
 const returnJWT = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = res.locals.user;
+    console.log(user);
     const token = jsonwebtoken_1.default.sign({
         sub: user.id,
         username: user.username,

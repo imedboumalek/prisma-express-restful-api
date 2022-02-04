@@ -1,56 +1,65 @@
-require("mocha");
-import chai, { should } from "chai";
+import chai, { expect } from "chai";
 import chaiHttp from "chai-http";
+import { after } from "mocha";
 import server from "../src/app";
 chai.use(chaiHttp);
-should;
+const app = chai.request(server).keepOpen();
 describe("/auth", () => {
+  after(() => {
+    app.close();
+  });
   describe("/login", () => {
-    it("should return 400 if username or password is missing", async () => {
-      const withoutUsername = await chai
-        .request(server)
+    it("should return 400 if username or password is missing", (done) => {
+      app
         .post("/auth/login")
         .send({
           username: "",
+        })
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.message).to.equal(
+            "Please provide username and password"
+          );
+          done();
         });
-      const withoutPassword = await chai
+    });
 
-        .request(server)
+    it("should return 403 if user does not exist", (done) => {
+      app
         .post("/auth/login")
         .send({
-          password: "",
+          username: "test",
+          password: "test",
+        })
+        .end((err, res) => {
+          expect(res.status).to.equal(403);
+          done();
         });
-      withoutPassword.status.should.equal(400);
-
-      withoutUsername.status.should.equal(400);
+    });
+    it("should return 403 if password is incorrect", (done) => {
+      app
+        .post("/auth/login")
+        .send({
+          username: "simohamed",
+          password: "test",
+        })
+        .end((err, res) => {
+          expect(res.status).to.equal(403);
+          done();
+        });
     });
 
-    it("should return 403 if user does not exist", async () => {
-      const res = await chai.request(server).post("/auth/login").send({
-        username: "test",
-        password: "test",
-      });
-      res.status.should.equal(403);
-      res.body.should.have.property("message");
-      res.body.message.should.equal("Invalid username or password");
-    });
-    it("should return 403 if password is incorrect", async () => {
-      const res = await chai.request(server).post("/auth/login").send({
-        username: "simohamed",
-        password: "test",
-      });
-      res.status.should.equal(403);
-      res.body.should.have.property("message");
-    });
-
-    it("should return JWT if username and password are correct", async () => {
-      const res = await chai.request(server).post("/auth/login").send({
-        username: "simohamed",
-        password: "12345679",
-      });
-      res.status.should.equal(200);
-      res.body.should.have.property("access_token");
-      res.body.access_token.should.be.a("string");
+    it("should return JWT if username and password are correct", (done) => {
+      app
+        .post("/auth/login")
+        .send({
+          username: "simohamed",
+          password: "12345679",
+        })
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          done();
+        });
     });
   });
 });

@@ -9,6 +9,8 @@ const seedOrgs = async () => {
       countryId: count++,
     });
   }
-  await dbclient.organization.createMany({ data: orgs }).then(() => {});
+  await dbclient.organization.createMany({ data: orgs }).then(() => {
+    console.log("Organizations seeded");
+  });
 };
 export default seedOrgs;

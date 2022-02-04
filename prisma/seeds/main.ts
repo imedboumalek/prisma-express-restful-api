@@ -10,15 +10,14 @@ const dbclient = new PrismaClient();
 export default dbclient;
 const main = async () => {
   await dbclient.$connect();
- 
+
   //NOTE: didn't use Promise.all on purpose.
   await seedCountries();
   await seedTopics();
   await seedTags();
   await seedOrgs();
   await seedAuthors();
-  await seedSubmissions().then(() =>
- 
+  await seedSubmissions().then(() => console.log("Submissions seeded"));
 };
 
 main().finally(() => {

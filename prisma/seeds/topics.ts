@@ -10,6 +10,8 @@ const seedTopics = async () => {
     });
     count++;
   }
-  await dbclient.topic.createMany({ data: topics }).then(() => {});
+  await dbclient.topic.createMany({ data: topics }).then(() => {
+    console.log("Topics seeded");
+  });
 };
 export default seedTopics;

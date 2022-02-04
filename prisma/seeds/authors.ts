@@ -9,7 +9,6 @@ const seedAuthors = async () => {
       email: faker.internet.email(),
       password: "$2b$10$jVjDsrUukI914p8goB5YLepxAKD9t5bC17avbLgrriS.d4OzeBqyC",
       salt: "$2b$10$jVjDsrUukI914p8goB5YLe",
-      jwt: null,
       username: faker.internet.userName(),
       first_name: faker.name.firstName(),
       last_name: faker.name.lastName(),
@@ -18,7 +17,9 @@ const seedAuthors = async () => {
     });
     count++;
   }
-  await dbclient.author.createMany({ data: authors }).then(() => {});
+  await dbclient.author.createMany({ data: authors }).then(() => {
+    console.log("Authors seeded");
+  });
 };
 
 export default seedAuthors;
