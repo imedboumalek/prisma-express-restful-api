@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const prisma_client_1 = __importDefault(require("../prisma-client"));
 const submissionsRouter = express_1.default.Router();
-submissionsRouter.get("/submissions", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllSubmissions = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield prisma_client_1.default.submission.findMany({
             include: {
@@ -33,10 +33,75 @@ submissionsRouter.get("/submissions", (req, res) => __awaiter(void 0, void 0, vo
             message: "Internal server error",
         });
     }
-}));
-const checkRequiredFields = (req, res, next) => {
-    const { title, authors, topic, conferences, tags } = req.body;
-};
+});
+const getSubmissionById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const submissionId = req.params.id;
+    try {
+        const response = yield prisma_client_1.default.submission.findUnique({
+            where: {
+                id: parseInt(submissionId),
+            },
+            include: {
+                authors: true,
+                topic: true,
+                conferences: true,
+                tags: true,
+            },
+        });
+        if (response) {
+            res.json(response);
+        }
+        else {
+            res.status(404).json({
+                message: "Submission not found",
+            });
+        }
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Internal server error",
+        });
+    }
+});
+const getSubmissionsByAuthorId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const authorId = req.query.authorId;
+    console.log("getSubmissionsByAuthorId", authorId);
+    try {
+        const response = yield prisma_client_1.default.submission.findMany({
+            where: {
+                authors: {
+                    some: {
+                        id: parseInt(authorId.toString()),
+                    },
+                },
+            },
+            include: {
+                authors: true,
+                topic: true,
+                conferences: true,
+                tags: true,
+            },
+        });
+        if (response) {
+            res.json(response);
+        }
+        else {
+            res.status(404).json({
+                message: "Submission not found",
+            });
+        }
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Internal server error",
+        });
+    }
+});
+submissionsRouter.get("/submissions/:id", getSubmissionById);
+submissionsRouter.get("/submissions", getAllSubmissions);
+submissionsRouter.get("/submissions?", getSubmissionsByAuthorId);
 submissionsRouter.post("/submissions", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send("post submission");
 }));
