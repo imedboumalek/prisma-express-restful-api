@@ -65,7 +65,7 @@ const returnJWT = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         username: user.username,
         iat: Math.floor(Date.now() / 1000),
     }, process.env.JWT_SECRET);
-    res.status(200).json({
+    res.json({
         access_token: token,
     });
 });

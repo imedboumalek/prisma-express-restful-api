@@ -6,7 +6,7 @@ import { Router } from "express";
 const checkRequiredFieldsForSignUp = (req, res, next) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
-    res.status(400).json({
+    res.status(403).json({
       message: "Please provide username, email and password",
     });
     return;
@@ -36,7 +36,7 @@ const validateSignUpCredentials = async (req, res, next) => {
   }
 
   if (response) {
-    res.status(400).json(response);
+    res.status(403).json(response);
     return;
   }
   next();
@@ -52,7 +52,7 @@ const checkIfCredsAreUsed = async (req, res, next) => {
     })) !== 0;
 
   if (usedCredentials) {
-    res.status(400).json({
+    res.status(403).json({
       message: "Username or email already exists",
     });
     return;

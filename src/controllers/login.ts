@@ -7,7 +7,7 @@ const checkRequiredFieldsForSignIn = (req, res, next) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
-    res.status(400).json({
+    res.status(403).json({
       message: "Please provide username and password",
     });
     return;
@@ -59,7 +59,7 @@ const returnJWT = async (req, res) => {
     process.env.JWT_SECRET
   );
 
-  res.status(200).json({
+  res.json({
     access_token: token,
   });
 };
