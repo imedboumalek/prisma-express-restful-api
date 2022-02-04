@@ -1,19 +1,73 @@
-import { assert } from "chai";
-
 require("mocha");
-describe("Testing Auth", () => {
+import { assert } from "chai";
+import chaiHttp from "chai-http";
+import server from "./../app";
+
+describe("/auth", () => {
   describe("/login", () => {
-    it("should return 400 if username or password is missing", () => {
-      assert(true);
+    it("should return 400 if username or password is missing", async () => {
+      await chai
+        .request(server)
+        .post("/auth/login")
+        .send({
+          username: "",
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          assert.equal(res.body.message, "username or password is missing");
+        });
+      await chai
+
+        .request(server)
+        .post("/auth/login")
+        .send({
+          password: "",
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          assert.equal(res.body.message, "username or password is missing");
+        });
     });
+
     it("should return 403 if user does not exist", () => {
-      assert(true);
+      chai
+        .request(server)
+        .post("/auth/login")
+        .send({
+          username: "test",
+          password: "test",
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 403);
+          assert.equal(res.body.message, "Invalid username or password");
+        });
     });
     it("should return 403 if password is incorrect", () => {
-      assert(true);
+      chai
+        .request(server)
+        .post("/auth/login")
+        .send({
+          username: "simohamed",
+          password: "test",
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 403);
+          assert.equal(res.body.message, "Invalid username or password");
+        });
     });
+
     it("should return JWT if username and password are correct", () => {
-      assert(true);
+      chai
+        .request(server)
+        .post("/auth/login")
+        .send({
+          username: "simohamed",
+          password: "12345679",
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          assert.isNotNull(res.body.access_token);
+        });
     });
   });
 });

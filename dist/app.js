@@ -23,6 +23,7 @@ const submissions_1 = __importDefault(require("./routes/submissions"));
 const swagger_config_1 = __importDefault(require("./swagger-config"));
 const prisma_client_1 = __importDefault(require("./prisma-client"));
 const helmet_1 = __importDefault(require("helmet"));
+const app = (0, express_1.default)();
 function main() {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -30,7 +31,6 @@ function main() {
         yield prisma_client_1.default.$connect().then(() => {
             console.log("connected to prisma");
         });
-        const app = (0, express_1.default)();
         app.use((0, morgan_1.default)("dev"));
         app.use((0, helmet_1.default)());
         app.use(express_1.default.json());
@@ -51,4 +51,5 @@ function main() {
 main().finally(() => {
     prisma_client_1.default.$disconnect();
 });
+exports.default = app;
 //# sourceMappingURL=app.js.map

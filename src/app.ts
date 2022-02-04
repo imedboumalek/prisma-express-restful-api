@@ -10,13 +10,13 @@ import docs from "./swagger-config";
 import dbclient from "./prisma-client";
 import helmet from "helmet";
 
+const app = express();
 async function main() {
   dotenv.config();
   await dbclient.$connect().then(() => {
     console.log("connected to prisma");
   });
 
-  const app = express();
   app.use(logger("dev"));
   app.use(helmet());
   app.use(express.json());
@@ -37,3 +37,5 @@ async function main() {
 main().finally(() => {
   dbclient.$disconnect();
 });
+
+export default app;
