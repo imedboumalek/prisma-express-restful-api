@@ -1,32 +1,26 @@
 require("mocha");
-import { assert } from "chai";
+import chai, { assert } from "chai";
 import chaiHttp from "chai-http";
-import server from "./../app";
-
+import server from "../src/app";
+chai.use(chaiHttp);
 describe("/auth", () => {
   describe("/login", () => {
     it("should return 400 if username or password is missing", async () => {
-      await chai
+      const withoutUsername = await chai
         .request(server)
         .post("/auth/login")
         .send({
           username: "",
-        })
-        .end((err, res) => {
-          assert.equal(res.status, 400);
-          assert.equal(res.body.message, "username or password is missing");
         });
-      await chai
+      const withoutPassword = await chai
 
         .request(server)
         .post("/auth/login")
         .send({
           password: "",
-        })
-        .end((err, res) => {
-          assert.equal(res.status, 400);
-          assert.equal(res.body.message, "username or password is missing");
         });
+      assert.equal(withoutUsername.status, 400);
+      assert.equal(withoutPassword.status, 400);
     });
 
     it("should return 403 if user does not exist", () => {

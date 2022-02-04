@@ -7,22 +7,19 @@ const express_1 = require("express");
 const login_1 = __importDefault(require("../controllers/login"));
 const signup_1 = __importDefault(require("../controllers/signup"));
 const authRouter = (0, express_1.Router)();
-const loginRouter = (0, express_1.Router)();
-const signupRouter = (0, express_1.Router)();
-loginRouter.post("/login", login_1.default);
-loginRouter.all("/login", (req, res) => {
+authRouter.post("/auth/login", login_1.default);
+authRouter.all("/auth/login", (req, res) => {
     // return method not allowed
     res.status(405).send({
         message: "Method not allowed",
     });
 });
-signupRouter.post("/signup", signup_1.default);
-signup_1.default.all("/signup", (req, res) => {
+authRouter.post("/auth/signup", signup_1.default);
+authRouter.all("/auth/signup", (req, res) => {
     // return method not allowed
     res.status(405).send({
         message: "Method not allowed",
     });
 });
-authRouter.use("/auth", loginRouter, signupRouter);
 exports.default = authRouter;
 //# sourceMappingURL=auth.js.map
