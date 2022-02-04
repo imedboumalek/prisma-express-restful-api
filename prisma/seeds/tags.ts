@@ -9,8 +9,6 @@ const seedTags = async () => {
     });
     count++;
   }
-  await dbclient.tag.createMany({ data: tags }).then(() => {
-    console.log("done seeding tags");
-  });
+  await dbclient.tag.createMany({ data: tags }).then(() => {});
 };
 export default seedTags;

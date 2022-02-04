@@ -12,6 +12,6 @@
       "*": ["node_modules/*"]
     }
   },
-  "include": ["src/**/*", "tests"],
-  "exclude": ["./tests/", "./node_modules/"]
+  "include": ["src/**/*"],
+  "exclude": ["src/tests", "./node_modules/"]
 }

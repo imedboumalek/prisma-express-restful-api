@@ -18,9 +18,7 @@ const seedAuthors = async () => {
     });
     count++;
   }
-  await dbclient.author.createMany({ data: authors }).then(() => {
-    console.log("done seeding authors");
-  });
+  await dbclient.author.createMany({ data: authors }).then(() => {});
 };
 
 export default seedAuthors;

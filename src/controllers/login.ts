@@ -4,11 +4,7 @@ import jsonwebtoken from "jsonwebtoken";
 import { Author } from "@prisma/client";
 import { Router } from "express";
 const checkRequiredFieldsForSignIn = (req, res, next) => {
-  console.log("login");
-
   const { username, password } = req.body;
-  console.log("username", username);
-  console.log("password", password);
 
   if (!username || !password) {
     res.status(400).json({
@@ -40,7 +36,6 @@ export const checkPassword = async (req, res, next) => {
   const user: Author = res.locals.user;
   const hashedPassword = await bcrypt.hash(password, user.salt);
   const isPasswordValid = hashedPassword === user.password;
-  console.log("isPasswordValid", isPasswordValid);
 
   if (!isPasswordValid) {
     res.status(403).json({

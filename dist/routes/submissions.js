@@ -28,15 +28,9 @@ submissionsRouter.get("/submissions", (req, res) => __awaiter(void 0, void 0, vo
         .then(res.json);
 }));
 const checkRequiredFields = (req, res, next) => {
-    console.log("post submission");
     const { title, authors, topic, conferences, tags } = req.body;
-    console.log("title", title);
-    console.log("authors", authors);
-    console.log("topic", topic);
-    console.log("conferences", conferences);
 };
 submissionsRouter.post("/submissions", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req);
     res.send("post submission");
 }));
 exports.default = submissionsRouter;

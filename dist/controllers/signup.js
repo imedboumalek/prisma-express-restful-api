@@ -69,7 +69,6 @@ const checkIfCredsAreUsed = (req, res, next) => __awaiter(void 0, void 0, void 0
             OR: [{ email: email }, { username: username }],
         },
     })) !== 0;
-    console.log("usedCredentials", usedCredentials);
     if (usedCredentials) {
         res.status(400).json({
             message: "Username or email already exists",

@@ -18,10 +18,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const express_1 = require("express");
 const checkRequiredFieldsForSignIn = (req, res, next) => {
-    console.log("login");
     const { username, password } = req.body;
-    console.log("username", username);
-    console.log("password", password);
     if (!username || !password) {
         res.status(400).json({
             message: "Please provide username and password",
@@ -51,7 +48,6 @@ const checkPassword = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     const user = res.locals.user;
     const hashedPassword = yield bcrypt_1.default.hash(password, user.salt);
     const isPasswordValid = hashedPassword === user.password;
-    console.log("isPasswordValid", isPasswordValid);
     if (!isPasswordValid) {
         res.status(403).json({
             message: "Username or password is incorrect",

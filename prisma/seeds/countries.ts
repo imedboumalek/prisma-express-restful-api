@@ -250,9 +250,7 @@ async function seedCountries() {
       ],
       skipDuplicates: true,
     })
-    .then(() => {
-      console.log("finished populating countries");
-    });
+    .then(() => {});
 }
 
 export default seedCountries;
