@@ -150,10 +150,52 @@ const validateSubmissionsFields = (req, res, next) => {
     next();
 };
 const createSubmission = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("createSubmission", req.body);
+    const userId = req.body.userId;
+    const title = req.body.title;
+    const resume = req.body.resume;
+    const authors = req.body.authors;
+    const topic = req.body.topic;
+    const tags = req.body.tags;
+    try {
+        const response = yield prisma_client_1.default.submission.create({
+            data: {
+                title,
+                resume,
+                authors: {
+                    connect: [userId, ...authors].map((author) => ({ id: author })),
+                },
+                topic: {
+                    connect: { id: topic },
+                },
+                tags: {
+                    connect: tags.map((tag) => ({ id: tag })),
+                },
+            },
+            include: {
+                authors: {
+                    select: {
+                        id: true,
+                        first_name: true,
+                        last_name: true,
+                        username: true,
+                    },
+                },
+                topic: true,
+                conferences: true,
+                tags: true,
+            },
+        });
+        res.json(response);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Internal server error",
+        });
+    }
 });
 submissionsRouter.get("/submissions", getAllSubmissions);
 submissionsRouter.get("/submissions/:id", getSubmissionById);
-submissionsRouter.post("/submissions", validateSubmissionsFields, checkAuthorization, createSubmission);
+submissionsRouter.post("/submissions", checkAuthorization, validateSubmissionsFields, createSubmission);
 exports.default = submissionsRouter;
 //# sourceMappingURL=submissions.js.map

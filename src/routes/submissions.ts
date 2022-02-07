@@ -155,15 +155,57 @@ const createSubmission = async (
   req: express.Request,
   res: express.Response
 ) => {
-  console.log("createSubmission", req.body);
+  const userId = req.body.userId;
+  const title: string = req.body.title;
+  const resume: string = req.body.resume;
+  const authors: number[] = req.body.authors;
+  const topic: number = req.body.topic;
+  const tags: number[] = req.body.tags;
+
+  try {
+    const response = await dbclient.submission.create({
+      data: {
+        title,
+        resume,
+        authors: {
+          connect: [userId, ...authors].map((author) => ({ id: author })),
+        },
+        topic: {
+          connect: { id: topic },
+        },
+        tags: {
+          connect: tags.map((tag) => ({ id: tag })),
+        },
+      },
+      include: {
+        authors: {
+          select: {
+            id: true,
+            first_name: true,
+            last_name: true,
+            username: true,
+          },
+        },
+        topic: true,
+        conferences: true,
+        tags: true,
+      },
+    });
+    res.json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
 };
 
 submissionsRouter.get("/submissions", getAllSubmissions);
 submissionsRouter.get("/submissions/:id", getSubmissionById);
 submissionsRouter.post(
   "/submissions",
-  validateSubmissionsFields,
   checkAuthorization,
+  validateSubmissionsFields,
   createSubmission
 );
 
