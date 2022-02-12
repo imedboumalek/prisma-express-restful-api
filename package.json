@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "tsc",
+    "build": "npx tsc",
     "predev": "npm run build",
     "dev": "nodemon src/app.ts",
     "prestart": "npm run build",
@@ -52,6 +52,7 @@
     "jshint": "^2.13.3",
     "mocha": "^9.2.0",
     "prisma": "^3.8.1",
-    "ts-node": "^10.4.0"
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.5"
   }
 }
