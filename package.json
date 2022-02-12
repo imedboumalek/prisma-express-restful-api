@@ -6,7 +6,7 @@
     "build": "npx tsc",
     "predev": "npm run build",
     "dev": "nodemon src/app.ts",
-    "prestart": "npm run build",
+    "prestart": "npm run build && npx prisma migrate deploy",
     "start": "node dist/app.js",
     "init-test-db": "dotenv -e .env.test -- npx prisma migrate reset",
     "postinit-test-db": "dotenv -e .env.test -- ts-node prisma/seeds/main.ts",
