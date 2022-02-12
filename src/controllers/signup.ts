@@ -44,12 +44,11 @@ const validateSignUpCredentials = async (req, res, next) => {
 
 const checkIfCredsAreUsed = async (req, res, next) => {
   const { username, email } = req.body;
-  const usedCredentials =
-    (await prisma.author.count({
-      where: {
-        OR: [{ email: email }, { username: username }],
-      },
-    })) !== 0;
+  const usedCredentials = await prisma.author.findFirst({
+    where: {
+      OR: [{ email: email }, { username: username }],
+    },
+  });
 
   if (usedCredentials) {
     res.status(403).json({
